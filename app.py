@@ -4,7 +4,7 @@ import os
 import numpy as np
 from PIL import Image
 from io import BytesIO
-from sklearn.cluster import KMeans
+#from sklearn.cluster import KMeans
 from image_compression_impl import load_image, image_compression_svd
 
 app = Flask(__name__)

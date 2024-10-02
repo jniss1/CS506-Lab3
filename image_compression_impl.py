@@ -3,11 +3,27 @@ from PIL import Image
 
 # Function to load and preprocess the image
 def load_image(image_path):
-    raise NotImplementedError('You need to implement this function')
+    #raise NotImplementedError('You need to implement this function')
+    # Loading up the image:
+    image = Image.open(image_path)
+    # Converting the image to a numpy array:
+    image_array = np.array(image)
+    return image_array
 
 # Function to perform SVD on a single channel of the image matrix
 def compress_channel_svd(channel_matrix, rank):
-    raise NotImplementedError('You need to implement this function')
+    #raise NotImplementedError('You need to implement this function')
+
+    # Doing built in SVD (will code this by hand for HW)
+    U, S, Vt = np.linalg.svd(channel_matrix, full_matrices=False)
+    # For compression, we only want the biggest, ie. top, singular values:
+    S = np.diag(S[:rank])
+    U = U[:, :rank]
+    Vt = Vt[:rank, :]
+    # Rebuilding the compressed image channel by recombining the compressed matricies:
+    compressed_channel = np.dot(U, np.dot(S,Vt))
+    return compressed_channel
+
 
 # Function to perform SVD for image compression
 def image_compression_svd(image_np, rank):
@@ -53,10 +69,10 @@ def save_result(original_image_np, quantized_image_np, output_path):
     
 if __name__ == '__main__':
     # Load and process the image
-    image_path = 'favorite_image.png'  
+    image_path = 'Pika.jpeg'  
     output_path = 'compressed_image.png'  
     image_np = load_image(image_path)
-
+    print("Test, should be array: ", image_np)
     # Perform image quantization using SVD
     rank = 8  # Rank for SVD, you may change this to experiment
     quantized_image_np = image_compression_svd(image_np, rank)
